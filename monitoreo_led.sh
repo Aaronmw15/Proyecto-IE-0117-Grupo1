@@ -34,7 +34,7 @@ verificar_proceso() {
             fi
         else
             if [[ -n "$EDITOR_PID" ]]; then
-                sleep 1
+                sleep 0.5
                 echo "-Archivo cerrado"
                 EDITOR_PID=""
                 apagar_led
