@@ -65,13 +65,13 @@ chmod +x monitoreo_led.sh
 ```
 Después de realizar estos cambios, se debe mover(o copiar) el archivo _monitoreo_led.sh_ a _/usr/local/bin_, puede ser con el comando:
 ```bash
-sudo cp monitoreo_led.sh /usr/local/bin/monitoreo_led.sh para copiar 
-sudo mv monitoreo_led.sh /usr/local/bin/monitoreo_led.sh para mover
+sudo cp monitoreo_led.sh /usr/local/bin/monitoreo_led.sh #para copiar 
+sudo mv monitoreo_led.sh /usr/local/bin/monitoreo_led.sh #para mover
 ```
 luego se debe copiar o mover el archivo _monitoreo_led.ervice_ a _etc/systemctl/system_, con el comando
 ```bash
-sudo cp monitoreo_led.service etc/systemctl/system/monitoreo_led.service para copiar 
-sudo mv monitoreo_led.service etc/systemctl/system/monitoreo_led.service para mover
+sudo cp monitoreo_led.service etc/systemctl/system/monitoreo_led.service #para copiar 
+sudo mv monitoreo_led.service etc/systemctl/system/monitoreo_led.service #para mover
 ```
 para habilitar el servicio es necesario ejecutar los siguientes comandos en la terminal:
 ```bash
