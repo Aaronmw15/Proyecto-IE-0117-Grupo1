@@ -42,15 +42,46 @@ static struct file_operations fops = {
     .write = dev_write,
 };
 
-3. Función led_init() [al cargar el módulo con insmod]
-Verificar si GPIO_LED es válido: gpio_is_valid(GPIO_LED)
-Solicitar el GPIO: gpio_request(GPIO_LED, "LED")
-Configurar como salida: gpio_direction_output(GPIO_LED, 0)
-Exportar el GPIO para debug: gpio_export(GPIO_LED, false)
-Registrar un dispositivo de caracteres (register_chrdev)
-Crear clase de dispositivo (class_create)
-Crear el archivo en /dev/ (device_create)
-Imprimir mensaje "módulo cargado correctamente"
+static int __init led_init(void) {
+    int result;
+
+    printk(KERN_INFO "led_module: Iniciando módulo...\n");
+
+    // Reservar GPIO27
+    if (!gpio_is_valid(LED_GPIO)) {
+        printk(KERN_ALERT "led_module: GPIO %d no es válido\n", LED_GPIO);
+        return -ENODEV;
+    }
+
+    gpio_request(LED_GPIO, "sysfs");
+    gpio_direction_output(LED_GPIO, 0); // LED apagado al iniciar
+    gpio_export(LED_GPIO, false);
+
+    // Registrar dispositivo de carácter
+    majorNumber = register_chrdev(0, DEVICE_NAME, &fops);
+    if (majorNumber < 0) {
+        printk(KERN_ALERT "led_module: Falló al registrar major number\n");
+        return majorNumber;
+    }
+
+    ledClass = class_create(THIS_MODULE, CLASS_NAME);
+    if (IS_ERR(ledClass)) {
+        unregister_chrdev(majorNumber, DEVICE_NAME);
+        printk(KERN_ALERT "led_module: Falló al crear clase\n");
+        return PTR_ERR(ledClass);
+    }
+
+    ledDevice = device_create(ledClass, NULL, MKDEV(majorNumber, 0), NULL, DEVICE_NAME);
+    if (IS_ERR(ledDevice)) {
+        class_destroy(ledClass);
+        unregister_chrdev(majorNumber, DEVICE_NAME);
+        printk(KERN_ALERT "led_module: Falló al crear el dispositivo\n");
+        return PTR_ERR(ledDevice);
+    }
+
+    printk(KERN_INFO "led_module: Dispositivo creado correctamente: /dev/%s\n", DEVICE_NAME);
+    return 0;
+}
 
 4. Función led_exit() [al descargar con rmmod]
 Eliminar el archivo en /dev/ (device_destroy)
