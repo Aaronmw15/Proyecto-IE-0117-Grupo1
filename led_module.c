@@ -82,10 +82,23 @@ static int __init led_init(void) {
     printk(KERN_INFO "led_module: Dispositivo creado correctamente: /dev/%s\n", DEVICE_NAME);
     return 0;
 }
+static void __exit led_exit(void) {
+    gpio_set_value(LED_GPIO, 0);
+    gpio_unexport(LED_GPIO);
+    gpio_free(LED_GPIO);
 
-4. Función led_exit() [al descargar con rmmod]
-Eliminar el archivo en /dev/ (device_destroy)
-Destruir la clase de dispositivo
-Liberar el número mayor de dispositivo (unregister_chrdev)
-Apagar LED con gpio_set_value(GPIO_LED, 0)
-Liberar y desexportar el GPIO
+    device_destroy(ledClass, MKDEV(majorNumber, 0));
+    class_unregister(ledClass);
+    class_destroy(ledClass);
+    unregister_chrdev(majorNumber, DEVICE_NAME);
+
+    printk(KERN_INFO "led_module: Módulo descargado.\n");
+}
+
+module_init(led_init);
+module_exit(led_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Equipo Maravilla");
+MODULE_DESCRIPTION("Módulo kernel simple para controlar LED en GPIO27");
+MODULE_VERSION("1.0");
