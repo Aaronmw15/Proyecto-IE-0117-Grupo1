@@ -1,7 +1,56 @@
 # Proyecto-IE-0117-Grupo1
 Este proyecto está diseñado para funcionar con el editor de texto mousepad, su propósito es monitorear la apertura y cierre de un archivo de texto con el editor mousepad  y controlar el encendido y apagado de un led a través de un modulo en el kernel.
 
-Para habilitar el servicio:
+## Instrucciones para compilar e instalar el módulo del kernel en Raspberry Pi
+A continuación se detallan los pasos necesarios para compilar e instalar el módulo led_module.ko en una Raspberry Pi:
+
+### Requisitos previos
+Antes de comenzar, asegúrese de contar con:
+Raspberry Pi con Raspberry Pi OS instalado.
+GPIO27 (físico pin 13) conectado a un LED con resistencia limitadora.
+Paquetes necesarios instalados:
+  ```bash
+  sudo apt update
+  sudo apt install -y raspberrypi-kernel-headers build-essential
+ ```
+### Estructura esperada
+El archivo del módulo debe llamarse led_module.c y debe estar acompañado de un archivo Makefile. Ambos deben encontrarse en el mismo directorio.
+### Compilación del módulo
+Desde el directorio que contiene el código fuente, ejecute:
+ ```bash
+  make
+ ```
+###  Instalación y carga del módulo
+Cargar el módulo:
+ ```bash
+  sudo insmod led_module.ko
+```
+Verificar que el módulo se haya cargado correctamente:
+```bash
+  lsmod | grep led_module
+dmesg | tail
+```
+El dispositivo de caracteres se creará como /dev/led_control. Puedes escribir sobre él desde el espacio de usuario para controlar el LED.
+```bash
+  echo on/off | sudo tee /dev/led_control
+```
+### (Opcional) Cargar el módulo automáticamente al arrancar
+Si deseas que el módulo se cargue automáticamente al iniciar la Raspberry Pi:
+Copia el archivo .ko al directorio de módulos:
+```bash
+  sudo cp led_module.ko /lib/modules/$(uname -r)/
+```
+Agrega el nombre del módulo al archivo /etc/modules:
+```bash
+  echo "led_module" | sudo tee -a /etc/modules
+```
+Actualiza las dependencias de los módulos:
+```bash
+  sudo depmod -a
+```
+⚠️ Recuerda que para que el módulo funcione correctamente, ningún otro proceso debe estar usando el GPIO al momento de cargarlo.
+
+## Para habilitar el demonio:
 
 Es necesario tener pgrep instalado, puede ser instalado con el comando apt install pgrep
 
