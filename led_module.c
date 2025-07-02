@@ -1,9 +1,24 @@
 PSEUDOCÓDIGO
-Nombre del módulo: led_module.ko
-1. Declarar constantes
-Definir el número de GPIO que controla el LED 
-Definir nombre del dispositivo
-Definir nombre de la clase de dispositivo
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/init.h>
+#include <linux/gpio.h>             // Control GPIO
+#include <linux/uaccess.h>         // copy_from_user
+#include <linux/device.h>          // device class
+#include <linux/cdev.h>
+
+#define DEVICE_NAME "led_control"
+#define CLASS_NAME "led"
+
+#define LED_GPIO 27
+
+static int majorNumber;
+static struct class*  ledClass  = NULL;
+static struct device* ledDevice = NULL;
+
+static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
+    char command[4] = {0}; // soporta hasta "on\n" o "off\n"
 
 2. Función write() del dispositivo
 Recibir un comando del espacio de usuario
