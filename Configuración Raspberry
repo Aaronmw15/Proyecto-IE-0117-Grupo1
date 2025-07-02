@@ -1,0 +1,20 @@
+Pasos y requisitos para la configuracion de la raspberry (herramienta necesaria para la creacion de este proyecto)
+Hardware:
+-Raspberry PI4
+-Mouse
+-Teclado
+-Monitor
+-Fuente de alimentación (Cargador tipo C)
+-Tarjeta de memoria micro SD de +16gb
+-Cable HDMI 
+-Adaptador de HDMI a micro HDMI (ya que micro HDMI es la entrada de la Raspberry PI4)
+Pasos del proceso de instalación de nuestro software:
+1 - En una computadora aparte, descargamos el programa Raspberry PI imager (https://www.raspberrypi.com/software/)
+2 - Ejecutamos el programa
+3 - Una vez ejecutado el programa nos va a poner a elegir las siguientes cosas:
+- Dispositivo Raspberry Pi: En este apartado elegiremos la versión de nuestra raspberry PI, en nuestro caso, la Raspberry PI4
+- Sistema operativo: El programa nos pide escoger nuestro software, elegimos Raspberry PI OS (64-bit) por temas de novedad, dicho sistema nos va a trabajar con UBUNTU
+- Elegir almacenamiento: En ensta opcion, se nos pide escoger el lugar donde será guardado nuestro sistema operativo, he aquí es donde entra la memoria micro SD previamente conectada a la computadora, seleccionamos nuestra memoria
+4 - Esperamos a que el programa guarde todo en la memoria
+5 - Una vez instalado nuestro sfoware en la memoria micro SD, procedemos a sacarla de nuestro PC y conectarlo a la Raspeberry PI4
+Si se siguieron todos los pasos bien, al encender nuestra Raspberry estaría funcionando funcionando
