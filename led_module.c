@@ -9,7 +9,8 @@
 #define DEVICE_NAME "led_control"
 #define CLASS_NAME "led"
 
-#define LED_GPIO 27
+// Cambiamos GPIO27 por su mapeo correspondiente en el kernel
+#define LED_GPIO 539
 
 static int majorNumber;
 static struct class*  ledClass  = NULL;
@@ -42,7 +43,7 @@ static struct file_operations fops = {
 };
 
 static int __init led_init(void) {
-    printk(KERN_INFO "led_module: Iniciando módulo GPIO27...\n");
+    printk(KERN_INFO "led_module: Iniciando módulo GPIO539...\n");
 
     if (!gpio_is_valid(LED_GPIO)) {
         printk(KERN_ALERT "led_module: GPIO %d no es válido\n", LED_GPIO);
@@ -101,5 +102,5 @@ module_exit(led_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("EquipoMaravilla");
-MODULE_DESCRIPTION("Módulo kernel simple para controlar LED en GPIO27 (API legacy)");
-MODULE_VERSION("1.1");
+MODULE_DESCRIPTION("Módulo kernel simple para controlar LED en GPIO27 (remapeado como GPIO539)");
+MODULE_VERSION("1.2");
