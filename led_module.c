@@ -19,13 +19,28 @@ static struct device* ledDevice = NULL;
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
     char command[4] = {0}; // soporta hasta "on\n" o "off\n"
+    if (len > 3)
+        len = 3;
 
-2. Función write() del dispositivo
-Recibir un comando del espacio de usuario
-Si el carácter es 'ON':
-    Llamar comando de encender LED
-Si el carácter es 'OFF':
-    Llamar comando de apagar LED
+    if (copy_from_user(command, buffer, len)) {
+        return -EFAULT;
+    }
+
+    if (strncmp(command, "on", 2) == 0) {
+        gpio_set_value(LED_GPIO, 1);
+    } else if (strncmp(command, "off", 3) == 0) {
+        gpio_set_value(LED_GPIO, 0);
+    } else {
+        printk(KERN_INFO "led_module: Comando inválido. Use 'on' o 'off'.\n");
+    }
+
+    return len;
+}
+
+static struct file_operations fops = {
+    .owner = THIS_MODULE,
+    .write = dev_write,
+};
 
 3. Función led_init() [al cargar el módulo con insmod]
 Verificar si GPIO_LED es válido: gpio_is_valid(GPIO_LED)
