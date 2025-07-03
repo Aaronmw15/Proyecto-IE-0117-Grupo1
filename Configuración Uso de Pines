@@ -1,0 +1,9 @@
+Explicación sencilla de lo que hay que tener en la raspberry para que funcione
+En nuestra terminal ejecutamos los siguientes comandos:
+1 - sudo apt update
+2- sudo apt install libgpiod-dev
+En la librería "libgpiod-dev" se nos incluye:
+-gpioset: Para establecer el estado de un pin, donde 1 es encendido y 0 es apagado
+-gpioget: Lee el estado de un pin
+Ya teniendo esta librería en nuestra Raspberry podemos poner a trabajar nuestros pines
+En caso de querer probar, se puede correr el archivo "led.sh" guardado en este mismo proyecto
